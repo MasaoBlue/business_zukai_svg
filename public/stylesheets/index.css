@@ -16,6 +16,12 @@ html, body {
   text-align: center;
 }
 
+#app .message {
+  padding: 1em;
+  font-size: 1.3em;
+  line-height: 1.2em;
+}
+
 #app svg {
   background: #ffffff;
 }

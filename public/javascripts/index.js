@@ -78,7 +78,7 @@ $(() => {
     right: 10,
   }
   let grid = {
-    size: 280,
+    size: 260,
     rows: 3,
     cols: 3,
   }

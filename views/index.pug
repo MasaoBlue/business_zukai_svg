@@ -8,6 +8,13 @@ block css
 
 block content
   #app(v-on:click="onAppClick" v-on:mouseover="onGridMouseOver")
+    .message
+      p
+        a(href="https://note.mu/tck/n/nb76ac2c2a709") ビジネスモデル図解ツール
+        | をSVGで実装してみたサンプルです。
+      p
+        | ソースコードは
+        a(href="https://github.com/MasaoBlue/business_zukai_svg") こちら
     svg(:viewbox="[0, 0, svg.width, svg.height].join(',')" :width="svg.width" :height="svg.height" xmlns="http://www.w3.org/2000/svg")
       defs
         marker#arrowMarker(markerunits="strokeWidth" markerwidth="7" markerheight="7" viewbox="0 0 30 30" refx="15" refy="15" orient="auto")
