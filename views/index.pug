@@ -1,0 +1,48 @@
+extends layout
+
+block css
+  link(rel='stylesheet', href='/stylesheets/index.css')
+  // foreignObjectの中でcssを読み込むと適用に時間がかかることがあるので
+  // 親html側で一度読み込んでおく
+  link(rel='stylesheet', href='/stylesheets/foreign.css')
+
+block content
+  #app(v-on:click="onAppClick" v-on:mouseover="onGridMouseOver")
+    svg(:viewbox="[0, 0, svg.width, svg.height].join(',')" :width="svg.width" :height="svg.height" xmlns="http://www.w3.org/2000/svg")
+      defs
+        marker#arrowMarker(markerunits="strokeWidth" markerwidth="7" markerheight="7" viewbox="0 0 30 30" refx="15" refy="15" orient="auto")
+          polygon(points="0,0 15,15 0,30 30,15 " fill="#000000")
+      g.gridContainer(:class="{lineDrawing: lineDrawing}" :transform="'translate(' + [margin.left, margin.top] + ')'")
+        g.grid(v-for="grid in grids" :transform="'translate(' + [grid.x, grid.y] + ')'" v-on:mouseover="onGridMouseOver" v-on:contextmenu="onGridContextMenu" :class="{active: grid.active, empty: !grid.image.src}")
+          rect.bg(:width="grid.width" :height="grid.height")
+          image(v-if="!!grid.image.src" :xlink:href="grid.image.src" :width="grid.image.width" :height="grid.image.height" :x="grid.image.x" :y="grid.image.y")
+          g(:transform="'translate(' + [grid.width / 2, textField.y + textField.height / 2] + ')'")
+            text.label(v-if="!!grid.image.src") {{ grid.text }}
+          text.placeholder(:x="grid.width / 2" :y="grid.height / 2") 右クリックで要素を追加
+          foreignObject(v-if="!!grid.image.src && grid.active" :width="textField.width" :height="textField.height" :x="textField.x" :y="textField.y")
+            head
+              link(rel='stylesheet', href='/stylesheets/foreign.css')
+            body.svgForeignObject(xmlns="http://www.w3.org/1999/xhtml" style="width: 100%; height: 100%;")
+              input(type="text" style="width: 100%; height: 100%;" v-model="grid.text")
+          g.linePoints
+            circle(v-for="point in linePoints" :r="linePointSize" :cx="point[0]" :cy="point[1]" v-on:click="onLinePointClick")
+      g.lineContainer(:transform="'translate(' + [margin.left, margin.top] + ')'")
+        path(v-for="line in lines" :d="'M' + line" marker-end="url(#arrowMarker)")
+    .imageListContainer(:class="{visible: imageList.visible}")
+      .imageList(:style="{left: imageList.x + 'px', top: imageList.y + 'px'}")
+        .cell(v-for="image in images" v-on:click="onImageCellClick")
+          .image
+            img(v-if="image.name != 'delete'" :src="image.src")
+          .label {{ image.label }}
+    .exportOverlay(:class="{open: exportImage}")
+      .exportImage
+        .image
+        .close(v-on:click="onExportImageClose") ×
+    .buttons
+      button(v-on:click="onDrawLineClick") 線で繋ぐ
+      button(v-on:click="onExportClick") 画像として出力
+
+block js
+  script(src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js')
+  script(src='https://cdn.jsdelivr.net/npm/vue/dist/vue.js')
+  script(src='/javascripts/index.js')

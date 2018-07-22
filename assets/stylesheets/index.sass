@@ -1,0 +1,130 @@
+// SVGから画像変換する際にfontを適用しようとすると
+//  - フォントファイルをbase64形式に変換
+//  - 変換したものをsvg内のstyleタグのfont-faceで埋め込み
+// という手順を踏む必要があり面倒だったので割愛
+// 【参考】
+//   https://ja.stackoverflow.com/questions/27146/svgでフォントを埋め込むことはできますか
+//   https://gist.github.com/viljamis/c4016ff88745a0846b94
+
+*, *:before, *:after
+  box-sizing: border-box
+  white-space: nowrap
+
+html, body
+  height: 100%
+  width: 100%
+  overflow: hidden
+
+#app
+  width: 100%
+  height: 100%
+  text-align: center
+  svg
+    background: #ffffff
+    .gridContainer
+      g
+        text
+          &.label
+            font-size: 1.5em
+            text-anchor: middle
+            dominant-baseline: central
+          &.placeholder
+            display: none
+        rect.bg
+          fill: #ffffff
+          stroke: #cccccc
+        &.active
+          rect
+            fill: rgba(#D4FCA9, 0.3)
+          &.empty
+            text.placeholder
+              fill: #bbbbbb
+              display: block
+              text-anchor: middle
+              dominant-baseline: central
+      .linePoints
+        display: none
+      &.lineDrawing
+        g
+          &.active
+            .linePoints
+              display: block
+              circle
+                fill: red
+    .lineContainer
+      path
+        fill: none
+        stroke: #000000
+        stroke-width: 3
+  .buttons
+    width: 800px
+    margin: auto
+    display: flex
+    justify-content: space-around
+
+.imageListContainer
+  display: none
+  &.visible
+    display: block
+  .imageList
+    $cell_size: 10vmin
+    box-shadow: 0 0 0.1em 0.1em rgba(black, 0.2)
+    background: #ffffff
+    position: fixed
+    display: flex
+    flex-wrap: wrap
+    width: $cell_size * 3
+    top: 0
+    left: 0
+    .cell
+      width: $cell_size
+      height: $cell_size
+      display: flex
+      flex-direction: column
+      &:hover
+        background: rgba(#CBECFA, 0.3)
+      > *
+        display: flex
+        align-items: center
+        justify-content: center
+      .image
+        height: 100%
+        padding: 0.5em
+        img
+          width: 100%
+          height: 100%
+          object-fit: contain
+      .label
+        min-height: 1em
+
+.exportOverlay
+  display: none
+  position: fixed
+  top: 0
+  left: 0
+  width: 100%
+  height: 100%
+  padding: 3em
+  background: rgba(#000000, 0.8)
+  opacity: 0
+  &.open
+    display: block
+    opacity: 1
+    transition: opacity 0.5s ease
+  .exportImage
+    position: relative
+    .image
+      text-align: center
+    .close
+      background: #cccccc
+      border-radius: 50%
+      display: flex
+      justify-content: center
+      align-items: center
+      position: absolute
+      top: 0
+      right: 0
+      padding: 1em
+      transform: translate(50%, -50%)
+      font-size: 1.5em
+      font-weight: bold
