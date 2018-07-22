@@ -1,10 +1,10 @@
 extends layout
 
 block css
-  link(rel='stylesheet', href='/stylesheets/index.css')
+  link(rel='stylesheet', href='./stylesheets/index.css')
   // foreignObjectの中でcssを読み込むと適用に時間がかかることがあるので
   // 親html側で一度読み込んでおく
-  link(rel='stylesheet', href='/stylesheets/foreign.css')
+  link(rel='stylesheet', href='./stylesheets/foreign.css')
 
 block content
   #app(v-on:click="onAppClick" v-on:mouseover="onGridMouseOver")
@@ -52,4 +52,4 @@ block content
 block js
   script(src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js')
   script(src='https://cdn.jsdelivr.net/npm/vue/dist/vue.js')
-  script(src='/javascripts/index.js')
+  script(src='./javascripts/index.js')
